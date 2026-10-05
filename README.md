@@ -34,8 +34,8 @@ Untuk instalasi CPU saja:
 
 ## Siapkan dataset
 
-1. Buka [halaman resmi UTKFace](https://susanqq.github.io/UTKFace/).
-2. Unduh **Aligned and Cropped Faces** dan ekstrak ke `data/raw/UTKFace/`. Program mencari citra secara rekursif, sehingga subfolder hasil ekstraksi boleh dipertahankan.
+1. Sumber ilmiah dan ketentuan penggunaan: [halaman resmi UTKFace](https://susanqq.github.io/UTKFace/) atau [repo AICIP](https://github.com/aicip/UTKFace).
+2. Untuk unduhan, gunakan [UTKFace Aligned & Cropped di Kaggle](https://www.kaggle.com/datasets/moritzm00/utkface-cropped), salinan dari pengunggah pihak ketiga. Buka halaman, login jika diminta, lalu pilih Download. Ekstrak citra ke `data/raw/UTKFace/`. Program mencari citra secara rekursif, sehingga subfolder hasil ekstraksi boleh dipertahankan. Halaman resmi masih terbaca saat diperiksa pada 6 Oktober 2026, tetapi tautan Google Drive untuk citra cropped mengembalikan 404; URL repo lama `github.com/susanqq/UTKFace` juga mengembalikan 404.
 3. Pertahankan nama asli berformat `usia_gender_race_timestamp.jpg`. Program hanya menggunakan usia sebagai target; atribut gender/race tidak menjadi input.
 4. Jalankan audit sebelum membuat eksperimen.
 
