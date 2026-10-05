@@ -6,6 +6,8 @@ Model penelitian perlu dilatih pada UTKFace sebelum dipakai di demo. Repo tidak 
 
 ## Mulai di Windows
 
+**Untuk Google Colab:** gunakan [Estimasi_Usia_Wajah_Colab.ipynb](Estimasi_Usia_Wajah_Colab.ipynb) dan [panduan Colab](docs/COLAB.md). Paket kode untuk diunggah ke Drive dibuat melalui `python scripts/package_colab.py`; dataset tetap terpisah dari Git dan checkpoint disimpan ke Drive.
+
 Untuk menjalankan proyek per tahap, buka **[Estimasi_Usia_Wajah.ipynb](Estimasi_Usia_Wajah.ipynb)** di VS Code/Jupyter. Pasang `requirements-notebook.txt`, pilih kernel `.venv`, lalu ikuti sel konfigurasi. Pelatihan dan evaluasi test tidak berjalan sebelum flag terkait diaktifkan; notebook belum memuat hasil penelitian.
 
 ```powershell
