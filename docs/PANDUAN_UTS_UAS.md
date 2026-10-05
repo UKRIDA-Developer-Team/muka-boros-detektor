@@ -19,7 +19,7 @@ Sumber persyaratan: `Panduan_Proyek_Akhir_Visi_Komputer_UTS_UAS.pdf` yang diberi
 
 UTS adalah sidang proposal. Program ini mendukung bukti data terbaca dan inferensi/pipeline berjalan. Smoke sintetis hanya bukti alur teknis; untuk bukti kelayakan data, unduh UTKFace dan jalankan audit pada data nyata. Siapkan proposal, slide 6-8 inti, peran dan pembagian presentasi, serta tracker sesuai panduan.
 
-Proposal paper dua kolom telah diperbarui menjadi tiga halaman dengan tujuh rujukan serta rencana eksperimen Colab dan B1 control. Panduan menyarankan 5-7 halaman di luar referensi serta meminta pembagian peran. Nama/NIM dan kontribusi anggota masih perlu dilengkapi; versi paper ini tidak diklaim sudah memenuhi semua butir administrasi baru.
+Proposal paper dua kolom memuat isi proposal lengkap, tujuh rujukan, rencana eksperimen Colab dan B1 control, serta risiko dan mitigasi. Jumlah halaman mengikuti isi dengan ukuran huruf yang mudah dibaca. Panduan menyarankan 5-7 halaman di luar referensi serta meminta pembagian peran. Nama/NIM dan kontribusi anggota masih perlu dilengkapi; versi paper ini tidak diklaim sudah memenuhi semua butir administrasi baru.
 
 ## Persiapan UAS
 
