@@ -6,6 +6,12 @@ Model penelitian perlu dilatih pada UTKFace sebelum dipakai di demo. Repo tidak 
 
 ## Mulai di Windows
 
+Untuk menjalankan proyek per tahap, buka **[Estimasi_Usia_Wajah.ipynb](Estimasi_Usia_Wajah.ipynb)** di VS Code/Jupyter. Pasang `requirements-notebook.txt`, pilih kernel `.venv`, lalu ikuti sel konfigurasi. Pelatihan dan evaluasi test tidak berjalan sebelum flag terkait diaktifkan; notebook belum memuat hasil penelitian.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-notebook.txt
+```
+
 Gunakan Python 3.12 dan buka terminal di folder repo.
 
 ```powershell
