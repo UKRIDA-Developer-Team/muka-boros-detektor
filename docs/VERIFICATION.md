@@ -14,7 +14,8 @@ Verifikasi lokal pada 6 Oktober 2026, Windows, Python 3.12 dengan lingkungan `.v
 | Logbook CSV | 13 baris isian kosong; tidak ada aktivitas, anggota, atau bukti yang dikarang |
 | Notebook `Estimasi_Usia_Wajah.ipynb` | Format nbformat 4.5 valid; seluruh 13 sel kode berjalan tanpa galat dengan flag default |
 | Dukungan Colab dan seluruh tes | 24 passed in 25.61s setelah penambahan 6 kasus ekstraksi ZIP |
-| Notebook Colab | Format dan sintaks valid; bootstrap arsip, audit, empat metode satu epoch, evaluasi, dan grafik berjalan pada simulasi lokal dengan 30 gambar sintetis |
+| Notebook mandiri dan regresi proyek | 25 passed in 33.17s, termasuk eksekusi notebook dalam proses terisolasi tanpa file proyek |
+| Notebook Colab mandiri | Tanpa import modul proyek/ZIP source; sel dijalankan dari salinan notebook dalam proses Python terisolasi dengan ZIP 30 gambar sintetis, empat metode satu epoch, evaluasi, grafik, inferensi, dan penggunaan ulang hasil |
 | Paket kode Colab | Tidak berisi dataset, model, `.venv`, `.git`, atau dokumen proposal |
 
 Pengujian memeriksa metrik dengan contoh yang dapat dihitung manual, duplikat dan pemisahan split, path input, fingerprint manifest, checkpoint yang tertukar, pembekuan backbone/BatchNorm, pipeline CLI, serta keadaan demo tanpa model.
@@ -25,4 +26,4 @@ Dataset UTKFace belum diunduh atau dilatih penuh dalam verifikasi ini. Belum ter
 
 Notebook diserahkan tanpa output penelitian. Bukti eksekusi default berada di `artifacts/local/notebook_default_verified.ipynb` dan diabaikan Git; flag audit, pelatihan, evaluasi akhir, serta smoke dinonaktifkan pada eksekusi ini.
 
-Bukti simulasi notebook Colab tersimpan di `artifacts/local/colab_local_simulation_verified.ipynb`. Simulasi memakai CPU lokal, folder pengganti Drive, serta konfigurasi sintetis; tidak memasang akun Google atau menguji GPU/mount Drive nyata. Versi Colab diserahkan tanpa output. Login dan eksperimen UTKFace sebenarnya perlu dijalankan pengguna sesuai `docs/COLAB.md`.
+Simulasi Colab versi awal tersimpan di `artifacts/local/colab_local_simulation_verified.ipynb`. Versi mandiri sekarang diuji melalui `tests/test_colab_notebook.py`: hanya salinan notebook dibawa ke folder tes, lalu semua fungsi dan alur dijalankan dengan Python `-I` tanpa repo pada import path. Autentikasi Google disimulasikan, paket telah tersedia di lingkungan tes, dan konfigurasi memakai gambar sintetis/CPU satu epoch. Tes juga memeriksa penguncian test set, checkpoint sintetis, ketidakcocokan hash dataset/konfigurasi, dan 13 baris logbook kosong. Versi Colab diserahkan tanpa output. Login/mount Drive, GPU Colab, dan eksperimen UTKFace perlu dijalankan pengguna sesuai `docs/COLAB.md`.

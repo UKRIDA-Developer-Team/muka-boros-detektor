@@ -6,7 +6,7 @@ Model penelitian perlu dilatih pada UTKFace sebelum dipakai di demo. Repo tidak 
 
 ## Mulai di Windows
 
-**Untuk Google Colab:** gunakan [Estimasi_Usia_Wajah_Colab.ipynb](Estimasi_Usia_Wajah_Colab.ipynb) dan [panduan Colab](docs/COLAB.md). Paket kode untuk diunggah ke Drive dibuat melalui `python scripts/package_colab.py`; dataset tetap terpisah dari Git dan checkpoint disimpan ke Drive.
+**Untuk Google Colab:** buka [notebook mandiri di Colab](https://colab.research.google.com/github/UKRIDA-Developer-Team/muka-boros-detektor/blob/main/Estimasi_Usia_Wajah_Colab.ipynb) atau unggah [Estimasi_Usia_Wajah_Colab.ipynb](Estimasi_Usia_Wajah_Colab.ipynb). Seluruh kode ada di notebook; cukup unggah `dataset.zip` ke `My Drive/ComVis/`, pilih GPU, lalu jalankan sel berurutan. Tidak perlu ZIP kode atau clone repo. Checkpoint dan hasil tersimpan ke Drive. Langkah lengkap ada di [panduan Colab](docs/COLAB.md).
 
 Untuk menjalankan proyek per tahap, buka **[Estimasi_Usia_Wajah.ipynb](Estimasi_Usia_Wajah.ipynb)** di VS Code/Jupyter. Pasang `requirements-notebook.txt`, pilih kernel `.venv`, lalu ikuti sel konfigurasi. Pelatihan dan evaluasi test tidak berjalan sebelum flag terkait diaktifkan; notebook belum memuat hasil penelitian.
 

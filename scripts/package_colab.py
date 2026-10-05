@@ -1,4 +1,4 @@
-"""Buat paket kode Colab tanpa dataset, checkpoint, atau lingkungan lokal."""
+"""Arsip source opsional; notebook Colab mandiri tidak membutuhkan paket ini."""
 import argparse
 import zipfile
 from pathlib import Path
