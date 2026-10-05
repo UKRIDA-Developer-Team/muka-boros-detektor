@@ -1,0 +1,23 @@
+# Logbook individual
+
+Nama:
+
+NIM:
+
+Kelompok:
+
+| Minggu | Tanggal | Target | Kegiatan nyata | Keputusan atau hasil belajar | Bukti | Kendala | Rencana berikutnya |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
+| | | | | | | | |
