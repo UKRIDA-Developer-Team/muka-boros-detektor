@@ -131,3 +131,137 @@ Nilai negatif berarti model di kiri lebih akurat. CI pada kolom Keterangan adala
 |---|---|---|---|---|---|---|
 | 2026-11-02 | latensi CPU median (ms) | 10.011 | 8.777 | +1.234 (+12.3%) | B lebih baik; CPU berbeda (Xeon 2.00 GHz vs 2.20 GHz) | David |
 | 2026-11-02 | jumlah parameter | 1518881 | 1518881 | +0 | sama | David |
+
+## 2026-11-03 · `7d4cc4c` vs `fac758c`
+
+- **Commit A:** `7d4cc4c` hmm kayaknya udah bener (David, 2026-11-02) · run r3 · split val · seed 43 · GPU NVIDIA A100-SXM4-40GB
+- **Commit B:** `fac758c` fix (David, 2026-11-03) · run r4 · split val · seed 43 · GPU NVIDIA A100-SXM4-40GB
+- *Performance Improvement* positif = Commit B lebih baik. Kolom Date dan Author mengacu ke Commit B. MSE = RMSE²; R² = 1 − MSE / Var(usia), dengan Var(usia) = RMSE_B0² − bias_B0². Keduanya angka turunan.
+
+### Ringkasan
+
+- **M1 makin akurat.** Rata-rata meleset turun dari 5.66 ke 5.11 tahun (−9.8%). R² naik dari 0.830 ke 0.859.
+- **Kenaikan terbesar di usia tua.** MAE usia 60+ turun 1.34 tahun (−13.2%), usia 40–59 turun 0.98 tahun (−11.9%). Semua kelompok usia, jenis kelamin, dan ras membaik.
+- **Overfitting berkurang.** Selisih MAE val − latih pada M1 turun dari 2.33 ke 1.25. Kemungkinan karena augmentasi baru (`AUG_ROTATE`, `AUG_TRANSLATE`, `AUG_SCALE`), `WEIGHT_DECAY` 1e-4 → 0.05, dan `DROPOUT` 0.3.
+- **Age-gating berubah dua arah.** Untuk L = 21, orang dewasa yang tertahan turun dari 33.9% ke 19.6%. Untuk L = 18, sedikit memburuk: T naik dari 24 ke 25, dan dewasa yang tertahan naik dari 11.4% ke 14.7%.
+- **Latensi CPU naik dari 8.8 ke 19.1 ms.** Kemungkinan karena `TTA_FLIP = True` (setiap foto diprediksi dua kali). Masih di bawah target 30 ms. B1 dan B1 control sedikit memburuk (MAE +0.11 dan +0.06 tahun).
+
+### Peringatan
+
+- Tidak ada. Split (val), seed (43), manifest, dan GPU sama. `RUN_TAG` di config cocok dengan log di kedua commit. Tidak ada sel error.
+- Catatan: MAE latih di commit B diukur pada data yang diaugmentasi lebih berat, jadi sebagian penurunan selisih val − latih berasal dari MAE latih yang naik.
+
+### Konfigurasi yang berubah
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | `WEIGHT_DECAY` | `1e-4` | `0.05` | - | berubah | David |
+| 2026-11-03 | `DROPOUT` | - | `0.3` | - | baru di commit B | David |
+| 2026-11-03 | `AUG_ROTATE` | - | `10` | - | baru di commit B | David |
+| 2026-11-03 | `AUG_TRANSLATE` | - | `0.05` | - | baru di commit B | David |
+| 2026-11-03 | `AUG_SCALE` | - | `(0.9, 1.1)` | - | baru di commit B | David |
+| 2026-11-03 | `TTA_FLIP` | - | `True` | - | baru di commit B | David |
+| 2026-11-03 | `RUN_TAG` | `'r3'` | `'r4'` | - | berubah | David |
+
+### Metrik utama
+
+Split val, n = 3468.
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | M1 · MAE (tahun) | 5.658 | 5.105 | +0.553 (+9.8%) | B lebih baik | David |
+| 2026-11-03 | M1 · MSE | 64.69 | 53.63 | +11.06 (+17.1%) | B lebih baik; turunan | David |
+| 2026-11-03 | M1 · RMSE | 8.043 | 7.323 | +0.720 (+9.0%) | B lebih baik | David |
+| 2026-11-03 | M1 · MedAE | 3.828 | 3.500 | +0.328 (+8.6%) | B lebih baik | David |
+| 2026-11-03 | M1 · bias (pred − label) | -0.524 | -0.416 | +0.108 | B lebih baik; makin dekat 0 makin baik | David |
+| 2026-11-03 | M1 · R² | 0.830 | 0.859 | +0.029 (+3.5%) | B lebih baik; turunan | David |
+| 2026-11-03 | M1 · penurunan MAE vs B0 | 60.7% | 64.6% | +3.9 poin | B lebih baik | David |
+| 2026-11-03 | B1c · MAE (tahun) | 7.122 | 7.181 | -0.059 (-0.8%) | A lebih baik | David |
+| 2026-11-03 | B1c · MSE | 99.00 | 101.26 | -2.26 (-2.3%) | A lebih baik; turunan | David |
+| 2026-11-03 | B1c · RMSE | 9.950 | 10.063 | -0.113 (-1.1%) | A lebih baik | David |
+| 2026-11-03 | B1c · MedAE | 5.016 | 4.969 | +0.047 (+0.9%) | B lebih baik | David |
+| 2026-11-03 | B1c · bias (pred − label) | -0.429 | -0.848 | -0.419 | A lebih baik; makin dekat 0 makin baik | David |
+| 2026-11-03 | B1c · R² | 0.740 | 0.734 | -0.006 (-0.8%) | A lebih baik; turunan | David |
+| 2026-11-03 | B1c · penurunan MAE vs B0 | 50.6% | 50.2% | -0.4 poin | A lebih baik | David |
+| 2026-11-03 | B1 · MAE (tahun) | 7.374 | 7.484 | -0.110 (-1.5%) | A lebih baik | David |
+| 2026-11-03 | B1 · MSE | 104.86 | 107.56 | -2.70 (-2.6%) | A lebih baik; turunan | David |
+| 2026-11-03 | B1 · RMSE | 10.240 | 10.371 | -0.131 (-1.3%) | A lebih baik | David |
+| 2026-11-03 | B1 · MedAE | 5.288 | 5.312 | -0.024 (-0.5%) | A lebih baik | David |
+| 2026-11-03 | B1 · bias (pred − label) | -0.769 | -0.743 | +0.026 | B lebih baik; makin dekat 0 makin baik | David |
+| 2026-11-03 | B1 · R² | 0.725 | 0.717 | -0.008 (-1.1%) | A lebih baik; turunan | David |
+| 2026-11-03 | B1 · penurunan MAE vs B0 | 48.8% | 48.1% | -0.7 poin | A lebih baik | David |
+
+### MAE M1 per kelompok
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | M1 · usia 0-12 (n=487) | 2.660 | 2.328 | +0.332 (+12.5%) | B lebih baik | David |
+| 2026-11-03 | M1 · usia 13-17 (n=112) | 5.672 | 5.509 | +0.163 (+2.9%) | B lebih baik | David |
+| 2026-11-03 | M1 · usia 18-24 (n=353) | 4.263 | 4.206 | +0.057 (+1.3%) | B lebih baik | David |
+| 2026-11-03 | M1 · usia 25-39 (n=1516) | 4.794 | 4.394 | +0.400 (+8.3%) | B lebih baik | David |
+| 2026-11-03 | M1 · usia 40-59 (n=629) | 8.189 | 7.213 | +0.976 (+11.9%) | B lebih baik | David |
+| 2026-11-03 | M1 · usia 60+ (n=371) | 10.157 | 8.815 | +1.342 (+13.2%) | B lebih baik | David |
+| 2026-11-03 | M1 · laki-laki (n=1862) | 5.824 | 5.154 | +0.670 (+11.5%) | B lebih baik | David |
+| 2026-11-03 | M1 · perempuan (n=1606) | 5.466 | 5.048 | +0.418 (+7.6%) | B lebih baik | David |
+| 2026-11-03 | M1 · ras Asian (n=537) | 4.141 | 3.778 | +0.363 (+8.8%) | B lebih baik | David |
+| 2026-11-03 | M1 · ras Black (n=685) | 6.015 | 5.422 | +0.593 (+9.9%) | B lebih baik | David |
+| 2026-11-03 | M1 · ras Indian (n=589) | 5.733 | 4.883 | +0.850 (+14.8%) | B lebih baik | David |
+| 2026-11-03 | M1 · ras Others (n=219) | 4.058 | 4.014 | +0.044 (+1.1%) | B lebih baik | David |
+| 2026-11-03 | M1 · ras White (n=1438) | 6.268 | 5.706 | +0.562 (+9.0%) | B lebih baik | David |
+
+### Age-gating
+
+Ambang T dipilih dari data validasi: T terkecil dengan FPR ≤ 5%. FPR = anak di bawah L yang lolos. FNR = orang dewasa yang tertahan.
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | M1 · L=18 · T rekomendasi | 24 | 25 | -1 | A lebih baik; makin dekat ke L makin baik | David |
+| 2026-11-03 | M1 · L=18 · FPR di T rek. | 4.5% | 4.0% | -0.5 poin | tidak dinilai; dibatasi ≤ 5% | David |
+| 2026-11-03 | M1 · L=18 · FNR di T rek. | 11.4% | 14.7% | -3.3 poin | A lebih baik | David |
+| 2026-11-03 | M1 · L=18 · AUC | 0.980 | 0.983 | +0.003 (+0.3%) | B lebih baik | David |
+| 2026-11-03 | M1 · L=21 · T rekomendasi | 28 | 26 | +2 | B lebih baik; makin dekat ke L makin baik | David |
+| 2026-11-03 | M1 · L=21 · FPR di T rek. | 3.2% | 4.9% | +1.7 poin | tidak dinilai; dibatasi ≤ 5% | David |
+| 2026-11-03 | M1 · L=21 · FNR di T rek. | 33.9% | 19.6% | +14.3 poin | B lebih baik | David |
+| 2026-11-03 | M1 · L=21 · AUC | 0.965 | 0.970 | +0.005 (+0.5%) | B lebih baik | David |
+| 2026-11-03 | B1c · L=18 · T rekomendasi | 32 | 30 | +2 | B lebih baik; makin dekat ke L makin baik | David |
+| 2026-11-03 | B1c · L=18 · FNR di T rek. | 49.5% | 42.8% | +6.7 poin | B lebih baik | David |
+| 2026-11-03 | B1c · L=18 · AUC | 0.933 | 0.937 | +0.004 (+0.4%) | B lebih baik | David |
+| 2026-11-03 | B1c · L=21 · T rekomendasi | 32 | 31 | +1 | B lebih baik; makin dekat ke L makin baik | David |
+| 2026-11-03 | B1c · L=21 · FNR di T rek. | 48.2% | 45.2% | +3.0 poin | B lebih baik | David |
+| 2026-11-03 | B1c · L=21 · AUC | 0.917 | 0.921 | +0.004 (+0.4%) | B lebih baik | David |
+
+### Bootstrap berpasangan
+
+Nilai negatif berarti model di kiri lebih akurat. CI pada kolom Keterangan adalah milik Commit B.
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | selisih MAE M1 − B1c | -1.463 | -2.076 | +0.613 | B lebih baik; CI [-2.265, -1.875], signifikan | David |
+| 2026-11-03 | selisih MAE M1 − B1 | -1.715 | -2.379 | +0.664 | B lebih baik; CI [-2.584, -2.164], signifikan | David |
+| 2026-11-03 | selisih MAE M1 − B0 | -8.752 | -9.305 | +0.553 | B lebih baik; CI [-9.735, -8.868], signifikan | David |
+| 2026-11-03 | selisih MAE B1c − B1 | -0.252 | -0.303 | +0.051 | B lebih baik; CI [-0.353, -0.257], signifikan | David |
+
+### Log pelatihan
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | M1 · MAE val terbaik | 5.658 | 5.105 | +0.553 (+9.8%) | B lebih baik | David |
+| 2026-11-03 | M1 · MAE latih di epoch terbaik | 3.33 | 3.86 | - | berubah; B dilatih dengan augmentasi lebih berat | David |
+| 2026-11-03 | M1 · selisih val − latih | 2.328 | 1.245 | +1.083 | B lebih baik; indikator overfitting | David |
+| 2026-11-03 | M1 · epoch terbaik / dijalankan | 23 / 33 | 38 / 48 | - | keduanya berhenti otomatis (early stopping) | David |
+| 2026-11-03 | M1 · lama latih (menit) | 7.8 | 13.7 | -5.9 | berubah; 14.2 → 17.1 detik per epoch | David |
+| 2026-11-03 | B1c · MAE val terbaik | 7.122 | 7.181 | -0.059 (-0.8%) | A lebih baik | David |
+| 2026-11-03 | B1c · selisih val − latih | 0.972 | 0.171 | +0.801 | B lebih baik; indikator overfitting | David |
+| 2026-11-03 | B1c · epoch terbaik / dijalankan | 47 / 57 | 60 / 60 | - | B terbaik di epoch terakhir, cek apakah MAE val masih turun | David |
+| 2026-11-03 | B1 · MAE val terbaik | 7.374 | 7.484 | -0.110 (-1.5%) | A lebih baik | David |
+| 2026-11-03 | B1 · selisih val − latih | - | -0.026 | - | tidak ada di commit A (B1 dipakai ulang, tanpa log epoch) | David |
+| 2026-11-03 | B1 · epoch terbaik / dijalankan | 60 / 60 | 52 / 60 | - | A terbaik di epoch terakhir | David |
+
+### Efisiensi
+
+| Date | Metric | Commit A | Commit B | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-03 | latensi CPU median (ms) | 8.777 | 19.094 | -10.317 (-117.5%) | A lebih baik; masih ≤ target 30 ms | David |
+| 2026-11-03 | latensi CPU p95 (ms) | 9.647 | 23.779 | -14.132 (-146.5%) | A lebih baik | David |
+| 2026-11-03 | praproses median (ms) | 1.831 | 2.179 | -0.348 (-19.0%) | A lebih baik | David |
+| 2026-11-03 | jumlah parameter | 1518881 | 1518881 | +0 | sama | David |
