@@ -1,4 +1,0 @@
-model,best_val_mae,best_epoch,epochs_run,train_minutes
-B1_s42,7.6,30,30,39.3
-M1_s42,6.068,30,30,39.9
-B1c_s42,7.284,30,30,39.3

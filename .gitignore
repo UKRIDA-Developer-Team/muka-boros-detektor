@@ -1,15 +1,38 @@
 .venv/
-.cache/
+venv/
 __pycache__/
-.pytest_cache/
 *.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.cache/
 tmp/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Data, runs, model weights
 data/raw/**
 !data/raw/.gitkeep
 data/processed/**
 !data/processed/.gitkeep
 runs/**
 !runs/.gitkeep
-*.pt
-.streamlit/secrets.toml
 artifacts/local/**
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.keras
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

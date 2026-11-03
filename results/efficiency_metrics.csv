@@ -1,9 +1,0 @@
-metrik,nilai
-parameter (model regresi),"1,518,881"
-parameter (MobileNetV3-Small 1000 kelas),"2,542,856"
-MAdds / FLOPs (juta),55.487
-ukuran berkas FP32 (MB),6.195
-praproses median (ms),2.316
-inferensi median CPU (ms),9.465
-inferensi p95 CPU (ms),15.383
-target latensi <= 30 ms,TERPENUHI (9.47 ms)
