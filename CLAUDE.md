@@ -38,6 +38,7 @@ Notebook tidak bisa dijalankan penuh secara lokal (butuh Drive, dataset Kaggle, 
   - M1: fine-tuning seluruh backbone, mulai dari B1 terbaik. Ini model utama.
   - B1c (B1 control): mulai dari B1 terbaik, hanya head dilanjutkan dengan pengaturan yang sama seperti M1.
 - Manifest (`manifest/manifest.csv`) membagi data train/val/test per grup duplikat dan per strata usia. Manifest dibangun sekali lalu dipakai ulang; SHA-256-nya dicatat di setiap run, dan cache prediksi (`results/preds/`) memakai SHA itu di nama berkasnya.
+- Augmentasi kacamata (`AUG_GLASSES_P`, sejak r5) menggambar kacamata buatan di posisi mata. Posisi mata dihitung sekali dengan YuNet di sel `eyes` dan disimpan di `manifest/eyes_<sha8>.csv`. Sel `glasses_eval` mengukur selisih prediksi dengan dan tanpa kacamata buatan, termasuk untuk M1 run lama di `GLASSES_BASELINE_TAGS`. Alasannya: di UTKFace, kacamata berkorelasi dengan usia tua, dan M1 r3 menebak wajah berkacamata 11 sampai 18 tahun lebih tua.
 - Data uji dikunci dengan `TEST_UNLOCKED = False`. Ambang T age-gating selalu dipilih dari validasi (`recommend_threshold`). Jangan membuka data uji kecuali user memintanya.
 
 Bagian berikut sengaja dijaga tetap stabil antar versi, karena run lama di Drive dan skill `bandingin-run` bergantung padanya: penanda `# @cell:`, nama key `CFG`, nama berkas di Drive, key `config.json`/`done.json`/checkpoint, nama kolom tabel output, dan format baris log epoch (`[M1_s43_r3] epoch N | loss ... | MAE latih ... | MAE val ... | ... s`).
@@ -48,8 +49,9 @@ Edit notebook lewat skill `edit-notebook`. Format JSON harus tetap `indent=2, en
 
 - `age-gating/models/age_verification_model.pt` adalah salinan `runs/M1_s43_r3/best.pt` dari Drive. Isinya dict checkpoint (`model`, `median_age`, `epoch`, `val_mae`, `method`, `seed`), bukan model utuh. File ini terkena aturan `*.pt` di `.gitignore`, jadi tidak ikut git.
 - `age-gating/src/age_gating/model.py` membangun ulang arsitektur dan praproses evaluasi dari notebook (`build_model`, resize 256, crop tengah 224, normalisasi ImageNet). Bila arsitektur atau praproses di notebook berubah, file ini harus disesuaikan. Checkpoint r3 dievaluasi tanpa TTA flip, jadi app juga tanpa TTA.
+- Mode Live (`age-gating/src/age_gating/live.py`, `streamlit-webrtc`) memproses video kamera per frame. Keputusannya memakai median prediksi 2 detik terakhir, minimal 8 sampel. Kamera diminta 1280x720, karena wajah beresolusi rendah ditebak lebih tua. WebRTC hanya untuk demo lokal; deploy online butuh server TURN. AppTest tidak bisa menjalankan mode ini.
 - App memutuskan dewasa dengan `AGE_LIMIT = 18`. Notebook merekomendasikan T = 24 untuk L = 18 (FPR validasi ≤ 5%).
-- Model dilatih dengan foto UTKFace yang sudah dipotong ke wajah. Foto kamera atau unggahan yang tidak dipotong menghasilkan tebakan yang kurang akurat.
+- Model dilatih dengan foto UTKFace yang sudah dipotong rapat ke wajah. Karena itu app mendeteksi wajah dulu dengan YuNet (`age-gating/models/face_detection_yunet_2023mar.onnx`, OpenCV `FaceDetectorYN`), meluruskannya berdasarkan posisi mata, lalu memotongnya (`crop_face` di `model.py`, `FACE_CROP_SCALE = 1.0` kali sisi terpanjang kotak wajah). Prediksi sangat peka terhadap longgarnya crop: makin longgar, makin tua tebakannya. Jangan ubah skala crop tanpa menguji ulang. Foto tanpa wajah terdeteksi ditolak.
 
 ## Konvensi
 

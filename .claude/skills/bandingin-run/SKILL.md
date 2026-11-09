@@ -37,6 +37,9 @@ Setiap sel kode diawali penanda `# @cell: <nama>`. Data yang dibutuhkan ada di o
 | `gating` | FPR, FNR, AUC per L dan T; kolom `T rekomendasi (val)` berisi `ya` (versi lama: `<-`) = T rekomendasi |
 | `bootstrap` | selisih MAE berpasangan beserta CI |
 | `efficiency` | latensi CPU dan jumlah parameter |
+| `tta` | M1 dengan dan tanpa TTA flip: MAE, T rekomendasi, FNR, AUC, latensi, dan selisih MAE bootstrap (sel baru; tidak ada di commit lama) |
+| `eyes` | persentase citra yang posisi matanya terdeteksi (sel baru sejak r5) |
+| `glasses_eval` | kepekaan terhadap kacamata buatan per model: rerata dan median selisih prediksi, porsi selisih > 5 th, MAE tanpa dan dengan kacamata, selisih per kelompok usia. Lebih kecil (mendekati 0) lebih baik. Baris `M1 r4` dan sejenisnya adalah run lama pembanding (sel baru sejak r5) |
 
 Tabel DataFrame paling akurat dibaca dari `data["text/html"]`. Versi `text/plain` sering terpotong atau terbungkus ke beberapa baris.
 
