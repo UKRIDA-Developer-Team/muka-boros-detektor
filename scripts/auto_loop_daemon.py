@@ -256,6 +256,9 @@ def main_loop():
         if exp_idx < len(experiments):
             cfg = experiments[exp_idx]
             exp_idx += 1
+            if (ROOT / 'results' / f"eval_{cfg['run_tag']}.json").exists():
+                log(f"Eksperimen {cfg['run_tag']} sudah selesai sebelumnya, melewati ke berikutnya.")
+                continue
         else:
             # Jika daftar dasar habis, generate variasi acak terarah di sekitar titik terbaik
             iteration += 1
