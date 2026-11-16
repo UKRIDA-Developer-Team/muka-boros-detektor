@@ -19,12 +19,12 @@ tmp/
 .streamlit/secrets.toml
 
 # Data, runs, model weights
-data/raw/**
-!data/raw/.gitkeep
-data/processed/**
-!data/processed/.gitkeep
+data/**
+!data/**/.gitkeep
+manifest/**
 runs/**
 !runs/.gitkeep
+*.log
 artifacts/local/**
 *.pt
 *.pth
