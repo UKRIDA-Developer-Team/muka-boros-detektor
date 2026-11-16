@@ -265,3 +265,31 @@ Nilai negatif berarti model di kiri lebih akurat. CI pada kolom Keterangan adala
 | 2026-11-03 | latensi CPU p95 (ms) | 9.647 | 23.779 | -14.132 (-146.5%) | A lebih baik | David |
 | 2026-11-03 | praproses median (ms) | 1.831 | 2.179 | -0.348 (-19.0%) | A lebih baik | David |
 | 2026-11-03 | jumlah parameter | 1518881 | 1518881 | +0 | sama | David |
+
+## 2026-11-16 ·  vs 
+
+- **Commit A / Baseline:** Run r4 · split val (n = 3468) · seed 43 · GPU A100 · MAE: 5.105 thn
+- **Commit B / Model Baru:** Run r6_reg_drop04 · split val (n = 3468) · seed 43 · CPU Ryzen 5 5600X · MAE: 5.091 thn
+- *Performance Improvement* positif = Commit B lebih baik.
+
+### Metrik utama
+
+| Date | Metric | Commit A (r4) | Commit B (r6_reg_drop04) | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-16 | M1 · MAE (tahun) | 5.105 | 5.091 | +0.014 (+0.3%) | B lebih baik | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · MSE | 53.63 | 53.01 | +0.62 (+1.2%) | B lebih baik; turunan | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · RMSE | 7.323 | 7.281 | +0.042 (+0.6%) | B lebih baik | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · MedAE | 3.500 | 3.561 | -0.061 (-1.7%) | A lebih baik | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · bias (pred − label) | -0.416 | -0.539 | -0.123 | A lebih baik | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · R² | 0.859 | 0.861 | +0.002 (+0.2%) | B lebih baik; turunan | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · penurunan MAE vs B0 | 64.6% | 64.7% | +0.1 poin | B lebih baik | AquaGecko & Antigravity |
+
+### Age-gating
+
+| Date | Metric | Commit A (r4) | Commit B (r6_reg_drop04) | Performance Improvement | Keterangan | Author |
+|---|---|---|---|---|---|---|
+| 2026-11-16 | M1 · L=18 · T rekomendasi | 25 | 24 | +1 | B lebih baik; makin dekat L=18 | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · L=18 · FPR di T rek. | 4.0% | 4.3% | +0.3 poin | tidak dinilai; dibatasi <= 5% | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · L=18 · FNR di T rek. | 14.7% | 8.05% | +6.65 poin | B jauh lebih baik; dewasa yang tertahan turun drastis! | AquaGecko & Antigravity |
+| 2026-11-16 | M1 · L=18 · AUC | 0.983 | 0.984 | +0.001 (+0.1%) | B lebih baik | AquaGecko & Antigravity |
+
