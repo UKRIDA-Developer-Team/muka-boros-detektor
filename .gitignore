@@ -27,6 +27,7 @@ runs/**
 *.log
 artifacts/local/**
 *.pt
+!age-gating/models/age_verification_model.pt
 *.pth
 *.ckpt
 *.h5
