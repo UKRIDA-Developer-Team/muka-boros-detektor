@@ -19,25 +19,18 @@ tmp/
 .streamlit/secrets.toml
 
 # Data, runs, model weights
-data/**
-!data/**/.gitkeep
-manifest/**
+data/raw/**
+!data/raw/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
 runs/**
 !runs/.gitkeep
-*.log
 artifacts/local/**
 *.pt
-!age-gating/models/age_verification_model.pt
 *.pth
 *.ckpt
 *.h5
 *.keras
-
-# Local training tools and drafts
-scripts/**
-results/**
-docs/*.docx
-docs/laporan_eksperimen_overnight.md
 
 # OS / editor
 .DS_Store
