@@ -33,6 +33,12 @@ artifacts/local/**
 *.h5
 *.keras
 
+# Local training tools and drafts
+scripts/**
+results/**
+docs/*.docx
+docs/laporan_eksperimen_overnight.md
+
 # OS / editor
 .DS_Store
 .idea/

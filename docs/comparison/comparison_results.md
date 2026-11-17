@@ -266,11 +266,16 @@ Nilai negatif berarti model di kiri lebih akurat. CI pada kolom Keterangan adala
 | 2026-11-03 | praproses median (ms) | 1.831 | 2.179 | -0.348 (-19.0%) | A lebih baik | David |
 | 2026-11-03 | jumlah parameter | 1518881 | 1518881 | +0 | sama | David |
 
-## 2026-11-16 ·  vs 
+## 2026-11-17 · `r4` vs `r6_reg_drop04`
 
 - **Commit A / Baseline:** Run r4 · split val (n = 3468) · seed 43 · GPU A100 · MAE: 5.105 thn
 - **Commit B / Model Baru:** Run r6_reg_drop04 · split val (n = 3468) · seed 43 · CPU Ryzen 5 5600X · MAE: 5.091 thn
 - *Performance Improvement* positif = Commit B lebih baik.
+
+### Ringkasan
+- Peningkatan dropout (0.40), weight decay (0.08), dan augmentasi kacamata (35%) berhasil memecahkan rekor MAE validasi terendah sepanjang proyek: **5.091 tahun** (turun dari baseline r4 sebesar 5.105 tahun).
+- Terobosan terbesar terjadi pada sistem age-gating usia 18 tahun: FNR (dewasa yang tertahan) turun drastis dari **14.7% ke 8.05%**, sementara T rekomendasi turun dari 25 ke 24 tahun dengan FPR terjaga <= 5%.
+- Pengujian balanced sampling (`r6_balanced_sampling`) berhasil menarik T rekomendasi lebih dekat ke usia hukum (T = 22 tahun), namun dengan trade-off kenaikan MAE agregat (5.55 tahun).
 
 ### Metrik utama
 
