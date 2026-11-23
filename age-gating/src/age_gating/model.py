@@ -15,21 +15,25 @@ PREPROCESS = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
-def build_model(median_age):
+def build_model(median_age, dropout=0.2):
     model = models.mobilenet_v3_small(weights=None)
     age_head = nn.Linear(model.classifier[3].in_features, 1)
     nn.init.constant_(age_head.bias, median_age)
     model.classifier[3] = age_head
+    model.classifier[2].p = dropout
     return model
 
-def load_model(path=MODEL_PATH):
+def load_model(path=MODEL_PATH, dropout=0.2):
     checkpoint = torch.load(path, map_location='cpu', weights_only=True)
-    model = build_model(checkpoint['median_age'])
+    model = build_model(checkpoint['median_age'], dropout=dropout)
     model.load_state_dict(checkpoint['model'])
     return model.eval()
 
 @torch.inference_mode()
-def predict_age(model, image: Image.Image) -> float:
+def predict_age(model, image: Image.Image, tta_flip: bool = False) -> float:
     image_tensor = PREPROCESS(image.convert('RGB')).unsqueeze(0)
     raw_age = model(image_tensor).item()
+    if tta_flip:
+        flipped = torch.flip(image_tensor, dims=[3])
+        raw_age = (raw_age + model(flipped).item()) / 2
     return min(max(raw_age, AGE_RANGE[0]), AGE_RANGE[1])
