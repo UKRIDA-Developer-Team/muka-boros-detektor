@@ -46,7 +46,8 @@ Edit notebook lewat skill `edit-notebook`. Format JSON harus tetap `indent=2, en
 
 ## Hubungan notebook dan app
 
-- `age-gating/models/age_verification_model.pt` adalah salinan `runs/M1_s43_r3/best.pt` dari Drive. Isinya dict checkpoint (`model`, `median_age`, `epoch`, `val_mae`, `method`, `seed`), bukan model utuh. File ini terkena aturan `*.pt` di `.gitignore`, jadi tidak ikut git.
+- `age-gating/models/age_verification_model.pt` adalah salinan `runs/M1_s43_r3/best.pt` dari Drive. Isinya dict checkpoint (`model`, `median_age`, `epoch`, `val_mae`, `method`, `seed`), bukan model utuh. File ini terkena aturan `*.pt` di `.gitignore`, tetapi sengaja di-commit dengan `git add -f` agar app di Streamlit Cloud punya model. Checkpoint baru juga perlu `git add -f`.
+- Streamlit Cloud hanya membaca `requirements.txt` di root repo (torch versi CPU), bukan `age-gating/pyproject.toml`. Dependensi baru wajib ditambahkan di kedua file. Cloud juga tidak memasang paket `age_gating`, jadi import antar modul app memakai nama modul langsung (`from model import ...`).
 - `age-gating/src/age_gating/model.py` membangun ulang arsitektur dan praproses evaluasi dari notebook (`build_model`, resize 256, crop tengah 224, normalisasi ImageNet). Bila arsitektur atau praproses di notebook berubah, file ini harus disesuaikan. Checkpoint r3 dievaluasi tanpa TTA flip, jadi app juga tanpa TTA.
 - App memutuskan dewasa dengan `AGE_LIMIT = 18`. Notebook merekomendasikan T = 24 untuk L = 18 (FPR validasi ≤ 5%).
 - Model dilatih dengan foto UTKFace yang sudah dipotong ke wajah. Foto kamera atau unggahan yang tidak dipotong menghasilkan tebakan yang kurang akurat.
