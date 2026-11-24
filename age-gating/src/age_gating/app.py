@@ -1,17 +1,22 @@
+import threading
 import time
 import streamlit as st
-from PIL import Image
+from PIL import Image, ImageOps
 from streamlit_webrtc import webrtc_streamer
 
 from iterations import ITERATIONS
 from live import LiveAgeProcessor
-from model import load_model, predict_age
+from model import crop_face, load_face_detector, load_model, predict_age
 
 AGE_LIMIT = 18   # batas usia dewasa
 
 @st.cache_resource
 def get_model(path_str: str, dropout: float):
     return load_model(path_str, dropout=dropout)
+
+@st.cache_resource
+def get_face_detector():
+    return load_face_detector(), threading.Lock()
 
 # Project: Age Gating
 st.title("Try Age Gating") # mw ganti kah kalo urusan urutan serah kalian deh ya pokoknya bagian ini jgn pake AI aja gw udah MUAKKKKK
@@ -70,18 +75,28 @@ else:
             st.image(picture, width=300, alt="Uploaded face photo")
 
     if picture:
+        face_detector, detector_lock = get_face_detector()
         with st.status("Verifying age based on your picture...") as status:
-            img = Image.open(picture)
-            age = round(predict_age(model, img, tta_flip=iteration.tta_flip))
+            img = ImageOps.exif_transpose(Image.open(picture))
+            with detector_lock:
+                face = crop_face(face_detector, img)
 
-            status.update(label="Age verification complete!", state="complete", expanded=False)
+            if face is None:
+                status.update(label="No face detected", state="error", expanded=False)
+            else:
+                age = round(predict_age(model, face, tta_flip=iteration.tta_flip))
+                st.image(face, caption="Face read by the model", width=160, alt="Cropped face used for age estimation")
+                status.update(label="Age verification complete!", state="complete", expanded=False)
 
-        is_adult = age >= AGE_LIMIT
-
-        if is_adult:
-            st.success(f"Your age has been successfully verified ({age} years old). You are allowed to access age-restricted content.")
+        if face is None:
+            st.warning("No face detected. Make sure your face is clearly visible, facing the camera, and well lit, then try again.")
         else:
-            st.error(f"Your age has been verified ({age} years old). You are not allowed to access age-restricted content.")
+            is_adult = age >= AGE_LIMIT
+
+            if is_adult:
+                st.success(f"Your age has been successfully verified ({age} years old). You are allowed to access age-restricted content.")
+            else:
+                st.error(f"Your age has been verified ({age} years old). You are not allowed to access age-restricted content.")
 
 st.divider()
 

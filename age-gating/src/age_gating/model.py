@@ -43,12 +43,17 @@ def load_face_detector(path=FACE_DETECTOR_PATH):
 def detect_face(detector, image: Image.Image) -> np.ndarray | None:
     image = image.convert('RGB')
     resize_ratio = min(1.0, DETECT_MAX_SIDE / max(image.size))
-    small = image.resize((round(image.width * resize_ratio), round(image.height * resize_ratio)))
+    small = image.resize((max(1, round(image.width * resize_ratio)), max(1, round(image.height * resize_ratio))))
     detector.setInputSize(small.size)
     _, faces = detector.detect(cv2.cvtColor(np.asarray(small), cv2.COLOR_RGB2BGR))
-    if faces is None:
+    if faces is None or len(faces) == 0:
         return None
     return max(faces, key=lambda f: f[2] * f[3]) / resize_ratio
+
+def crop_face(detector, image: Image.Image) -> Image.Image | None:
+    image = image.convert('RGB')
+    face = detect_face(detector, image)
+    return None if face is None else align_and_crop(image, face)
 
 def align_and_crop(image: Image.Image, face: np.ndarray) -> Image.Image:
     x, y, w, h = face[:4]
