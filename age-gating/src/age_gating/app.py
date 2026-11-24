@@ -5,7 +5,7 @@ from PIL import Image, ImageOps
 from streamlit_webrtc import webrtc_streamer
 
 from iterations import ITERATIONS
-from live import LiveAgeProcessor
+from live import LiveAgeProcessor, get_rtc_configuration
 from model import crop_face, load_face_detector, load_model, predict_age
 
 AGE_LIMIT = 18   # batas usia dewasa
@@ -67,6 +67,7 @@ else:
         webrtc_streamer(
             key=f"live-age-{iteration.tag}",
             video_processor_factory=lambda: LiveAgeProcessor(model, AGE_LIMIT, tta_flip=iteration.tta_flip),
+            rtc_configuration=get_rtc_configuration(),
             media_stream_constraints={"video": {"width": {"ideal": 1280}, "height": {"ideal": 720}}, "audio": False},
         )
     else:

@@ -1,11 +1,14 @@
+import os
 import time
 from collections import deque
 
 import av
 import cv2
 import numpy as np
+import streamlit as st
 from PIL import Image
 from streamlit_webrtc import VideoProcessorBase
+from streamlit_webrtc.credentials import get_available_ice_servers
 
 from model import align_and_crop, detect_face, load_face_detector, predict_age
 
@@ -14,6 +17,17 @@ MIN_SAMPLES = 8
 COLOR_ADULT = (40, 180, 70)
 COLOR_MINOR = (220, 50, 50)
 COLOR_WAITING = (240, 190, 40)
+TURN_SECRET_KEYS = ("HF_TOKEN", "CLOUDFLARE_TURN_KEY_ID", "CLOUDFLARE_TURN_KEY_API_TOKEN", "TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN")
+
+def get_rtc_configuration():
+    for key in TURN_SECRET_KEYS:
+        try:
+            value = st.secrets.get(key)
+        except Exception:
+            value = None
+        if value and not os.getenv(key):
+            os.environ[key] = str(value)
+    return {"iceServers": get_available_ice_servers()}
 
 class LiveAgeProcessor(VideoProcessorBase):
     def __init__(self, model, age_limit, tta_flip=False):
